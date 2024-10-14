@@ -1,5 +1,5 @@
     .data
-n:      .word 30                 # Input value n
+n:      .word 10                 # Input value n
 
     .text
     .globl main
@@ -15,13 +15,15 @@ main:
 
 loop:
     add t3, t0, t1              # ans = a + b
+    addi t2, t2, 1              # Increment i(move to here since data hazard)
     addi t0, t1, 0                 # a = b
     addi t1, t3, 0                 # b = ans
-    addi t2, t2, 1              # Increment i
     blt t2, a0, loop            # If i < n, go to loop
 
 return_result:
+    
     addi a0, t3, 0                 # Move result to a0
+    li a7, 1                    # Prepare to print result(move to here since data hazard)
     j print_result
     
 return_one:
@@ -33,5 +35,4 @@ return_two:
     j print_result
 
 print_result:
-    li a7, 1                    # Prepare to print result
     ecall                       # Print the result
